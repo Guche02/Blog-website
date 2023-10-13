@@ -1,3 +1,3 @@
 # Blog-website
-Further updates to be added. 
+Further updates are to be added. 
 Not completed yet.
