@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const mongoose = require("mongoose")
 const _ = require("lodash");
 //It is used to add functionality to the URL encoding and provide specified pages according to the URL.
 
@@ -13,67 +14,92 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-let posts = [ ]
-
-
-app.get("/", function(req,res)
-{
-  res.render("home", { homeContent: homeStartingContent, posts : posts});
+mongoose.connect("mongodb://127.0.0.1:27017/blogDB", { useNewUrlParser: true }).then(function () {
+  console.log("Successfully Connected.")
 })
 
-app.get("/compose", function(req,res)
-{
-  res.render("compose");
-})
+const postSchema = {
+  title: String,
+  content: String
+};
 
-app.get("/about", function(req,res)
-{
-  res.render("about", { aboutContent: aboutContent});
-})
+const Post = mongoose.model("Post", postSchema)
 
-app.get("/contact", function(req,res)
-{
-  res.render("contact", { contactContent: contactContent});
-})
-
-//To specify the parameters, to avoid making a custom route foe each and every options.
-app.get("/posts/:postName", function(req,res)
-{
-  const requestedTitle = _.lowerCase(req.params.postName)
-  
-  posts.forEach(function(post)
-  {
-    storedtitle = _.lowerCase(post.title)
-    // It is used to change all the words into lowerCase and ignore the - in the URL
-    // The - format used to speicfy the parameters in URL is called kebab format.
-    if (requestedTitle === storedtitle)
-    {
-      res.render("post", { post : post})
-      return; //exits the loop early.
+app.get("/", function (req, res) {
+  Post.find({}).then(function (result) {
+    if (result.length === 0) {
+      console.log("No posts are present.")
+      res.render("home", { homeContent: homeStartingContent, posts: result });
+    }
+    else {
+      res.render("home", { homeContent: homeStartingContent, posts: result });
+      // console.log(result);
     }
   })
 })
 
-app.get("/posts",function(req,res)
-{
-  console.log(req.body)
+app.get("/compose", function (req, res) {
+  res.render("compose");
+})
+
+app.get("/about", function (req, res) {
+  res.render("about", { aboutContent: aboutContent });
+})
+
+app.get("/contact", function (req, res) {
+  res.render("contact", { contactContent: contactContent });
+})
+
+//To specify the parameters, to avoid making a custom route for each and every options.
+app.get("/posts/:postID", function (req, res) {
+  const requestedId = req.params.postID
+  // console.log(requestedId)
+
+  Post.findOne({_id : requestedId}).then((function(result) {
+    if(result){
+    res.render("post", { post: result })}
+    else{
+      console.log("post not found")
+    }
+  }))
+
+  // used while implementing without database.
+  // storedtitle = _.lowerCase(post.title)
+  // // It is used to change all the words into lowerCase and ignore the - in the URL
+  // // The - format used to speicfy the parameters in URL is called kebab format.
 })
 
 
-app.post("/compose", function(req,res)
-{
-  const newBlog = {
-    title : req.body.newTitle,
-    content : req.body.newPost
-  };
-  posts.push(newBlog);
+app.post("/compose", function (req, res) {
+  // creating a document to store the blog posts.
+
+  const post = new Post({
+    title: _.capitalize(req.body.newTitle),
+    content: req.body.newPost
+  });
+  post.save();
   res.redirect("/")
 })
 
+app.post("/search", function(req,res){
+  const requestedTitle = _.capitalize(req.body.blogName)
 
-app.listen(3000, function() {
+  Post.findOne({ title : requestedTitle}).then(function(result)
+  {
+    if(result){
+    res.redirect("/posts/"+ result._id)}
+    else {
+      console.log("Post not found.")
+    }
+  })
+  })
+
+
+
+
+app.listen(3000, function () {
   console.log("Server started on port 3000");
 });
