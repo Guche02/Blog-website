@@ -62,7 +62,7 @@ app.get("/posts/:postID", function (req, res) {
     if(result){
     res.render("post", { post: result })}
     else{
-      console.log("post not found")
+      res.render("post",{notFoundMessage: "No results found."})
     }
   }))
 
@@ -92,7 +92,7 @@ app.post("/search", function(req,res){
     if(result){
     res.redirect("/posts/"+ result._id)}
     else {
-      console.log("Post not found.")
+      res.render("post",{notFoundMessage: "No results found.", post:NaN})
     }
   })
   })

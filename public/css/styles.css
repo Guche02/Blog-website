@@ -101,3 +101,19 @@
 #publish {
     background-color: #1abc9c;
 }
+
+#plusButton {
+    margin-top: 20px;
+    background-color: #1abc9c;
+    color: #fff;
+    border: 2px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+
+#plusButton:hover{
+    color:  rgb(129, 125, 125);
+}
