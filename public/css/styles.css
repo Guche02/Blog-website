@@ -14,7 +14,7 @@
 }
 
 .navbar-brand {
-    margin-right: 250px;
+    margin-right: 100px;
 
 }
 
@@ -48,11 +48,6 @@
     color:  rgb(129, 125, 125);
 }
 
-/* HOME button styles */
-#home a {
-    margin-right: 20px;
-    /* Add margin to separate "HOME" and other links */
-}
 
 /* Footer styles */
 .footer {
@@ -82,6 +77,31 @@
     margin-bottom: 10px;
 }
 
+.reg-log {
+    width: 40%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.reg {
+    width: 40%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 10px;
+}
+
+.reg input
+{
+    font-family: sans-serif;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #1abc9c;
+    border-radius: 5px;
+}
+
 /* Apply the same styles to input and textarea */
 .form-group input,
 .form-group textarea {
@@ -92,18 +112,15 @@
     border-radius: 5px;
 }
 
+
+
 /* Style the textarea to make it multiline */
 .form-group textarea {
     height: 150px;
     /* Adjust the initial height as needed */
 }
 
-#publish {
-    background-color: #1abc9c;
-}
-
-#plusButton {
-    margin-top: 20px;
+#plusButton, .publish {
     background-color: #1abc9c;
     color: #fff;
     border: 2px;
@@ -114,6 +131,7 @@
     font-size: 15px;
 }
 
-#plusButton:hover{
+#plusButton:hover, .publish:hover{
     color:  rgb(129, 125, 125);
 }
+

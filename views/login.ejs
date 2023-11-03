@@ -1,0 +1,19 @@
+<%- include("partials/header") -%>
+
+    <h1>Log In here!</h1>
+
+    <form action="/log" method="post">
+        <div class="reg">
+
+            <label for="name">Email Address</label>
+            <input type="email" name="email" required autocapitalize="on">
+
+            <label for="pass">Password</label>
+            <input type="text" name="pass" required autocomplete="off">
+        </div>
+            <button class="publish" type="submit">Log In</button>
+        </div>
+    </form>
+
+
+    <%- include("partials/footer") -%>

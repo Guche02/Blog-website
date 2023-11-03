@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose")
+// To use user module
+const User = require("./user.js")
 const _ = require("lodash");
 //It is used to add functionality to the URL encoding and provide specified pages according to the URL.
 
@@ -53,16 +55,27 @@ app.get("/contact", function (req, res) {
   res.render("contact", { contactContent: contactContent });
 })
 
+app.get("/register", function (req, res) {
+  res.render("register");
+})
+
+app.get("/login", function (req, res) {
+  res.render("login");
+})
+
+
+
 //To specify the parameters, to avoid making a custom route for each and every options.
 app.get("/posts/:postID", function (req, res) {
   const requestedId = req.params.postID
   // console.log(requestedId)
 
-  Post.findOne({_id : requestedId}).then((function(result) {
-    if(result){
-    res.render("post", { post: result })}
-    else{
-      res.render("post",{notFoundMessage: "No results found."})
+  Post.findOne({ _id: requestedId }).then((function (result) {
+    if (result) {
+      res.render("post", { post: result })
+    }
+    else {
+      res.render("post", { notFoundMessage: "No results found." })
     }
   }))
 
@@ -84,20 +97,47 @@ app.post("/compose", function (req, res) {
   res.redirect("/")
 })
 
-app.post("/search", function(req,res){
+app.post("/reg", function (req, res) {
+  const newUser = new User({
+    name: req.body.name,
+    email: req.body.email
+  })
+  newUser.password = newUser.generateHash(req.body.pass);
+  newUser.save();
+  res.redirect("/login")
+})
+
+// let loggedIn = false;
+
+// checking the credentials.
+app.post("/log", function (req, res) {
+  User.findOne({email: req.body.email}).then(function(user) {
+    console.log("User found")
+    if (!user.validPassword(req.body.pass)) {
+      console.log("Password didn't match")
+    } else {
+      // loggedIn = true
+      console.log("Password Matched.")
+      res.redirect("/home")
+    }
+  }).catch(function(error)
+  {
+    console.log(error)
+  })
+})
+
+app.post("/search", function (req, res) {
   const requestedTitle = _.capitalize(req.body.blogName)
 
-  Post.findOne({ title : requestedTitle}).then(function(result)
-  {
-    if(result){
-    res.redirect("/posts/"+ result._id)}
+  Post.findOne({ title: requestedTitle }).then(function (result) {
+    if (result) {
+      res.redirect("/posts/" + result._id)
+    }
     else {
-      res.render("post",{notFoundMessage: "No results found.", post:NaN})
+      res.render("post", { notFoundMessage: "No results found.", post: NaN })
     }
   })
-  })
-
-
+})
 
 
 app.listen(3000, function () {

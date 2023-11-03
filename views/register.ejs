@@ -1,0 +1,27 @@
+<%- include("partials/header") -%>
+
+    <h2>Are you a new user?</h2>
+    <h1>Register here!</h1>
+
+    <form action="/reg" method="post">
+        <div class="reg">
+            <label for="name">Full Name</label>
+            <input type="text" name="name" required autocapitalize="on">
+
+            <label for="email">Email Address</label>
+            <input type="email" name="email" required autocapitalize="on">
+
+            <label for="pass">Create Password</label>
+            <input type="text" name="pass" required autocomplete="off">
+
+        </div>
+        <div class="reg-log">
+            <button class="publish" type="submit">Sign up!</button>
+        </form>
+            <form action="/login" method="get">
+                <button class="publish" name="log" type="submit">Account already exists?</button>
+            </form>
+        </div>
+
+
+    <%- include("partials/footer") -%>
