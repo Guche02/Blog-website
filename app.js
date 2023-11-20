@@ -30,11 +30,12 @@ const postSchema = {
 
 const Post = mongoose.model("Post", postSchema)
 
+
 app.get("/", function (req, res) {
   Post.find({}).then(function (result) {
     if (result.length === 0) {
       console.log("No posts are present.")
-      res.render("home", { homeContent: homeStartingContent, posts: result });
+      res.render("home", { homeContent: homeStartingContent, posts: result});
     }
     else {
       res.render("home", { homeContent: homeStartingContent, posts: result });
@@ -72,7 +73,7 @@ app.get("/posts/:postID", function (req, res) {
 
   Post.findOne({ _id: requestedId }).then((function (result) {
     if (result) {
-      res.render("post", { post: result })
+      res.render("post", { post: result, notFoundMessage: " "})
     }
     else {
       res.render("post", { notFoundMessage: "No results found." })
@@ -116,9 +117,9 @@ app.post("/log", function (req, res) {
     if (!user.validPassword(req.body.pass)) {
       console.log("Password didn't match")
     } else {
-      // loggedIn = true
-      console.log("Password Matched.")
-      res.redirect("/home")
+      console.log("You are now logged In.")
+      res.redirect("/")
+  
     }
   }).catch(function(error)
   {
@@ -131,6 +132,7 @@ app.post("/search", function (req, res) {
 
   Post.findOne({ title: requestedTitle }).then(function (result) {
     if (result) {
+      // console.log(result)
       res.redirect("/posts/" + result._id)
     }
     else {

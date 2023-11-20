@@ -1,7 +1,11 @@
 # Blog-website
-Further updates are to be added. 
-Not completed yet.
 
-next: add login symbol to specify loggedin
-      ,only show add new post to loggedin audience
-      ,add like and comment functionality on posts
+## This is a simple blog website made using nodeJS, express and mongoDB as database. 
+
+To install the dependencies, run the following command: 
+```
+npm install
+```
+
+To view how the data is stored in the database, read the documentation of mongoDB [here](https://www.mongodb.com/docs/manual/introduction/)
+
